@@ -63,13 +63,14 @@ class Gambler(id: EntityID<UUID>) : BaseUuidEntity(id, GamblerTable){
             } else {
                 resetWinStreak()
                 lossStreak = (lossStreak + 1).toShort()
+                val lossStreakCopy = lossStreak // resetLossStreak resets the loss streaks so when it's passed to GameResult it's shown as 0 instead of the current loss streak
                 balance = max((balance - (amount * lossStreak)), 0.0)
 
                 if (balance == 0.0) {
                     resetLossStreak()
                 }
 
-                return@transaction GambleResult(false, amount, max((amount * lossStreak), 0.0), lossStreak)
+                return@transaction GambleResult(false, amount, max((amount * lossStreak), 0.0), lossStreakCopy)
             }
         }
     }

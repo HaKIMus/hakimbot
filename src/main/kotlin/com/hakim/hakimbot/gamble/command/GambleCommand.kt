@@ -136,7 +136,7 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService) : List
                     result.outcome
                 )
             } żetonów**! :dollar:
-                Win streak: **x${result.streak}** <a:MOOOOOOOOOO:1000802783022305290>
+                Win streak: **x${result.streak}** ${displayStringTimes("<a:MOOOOOOOOOO:1000802783022305290>", result.streak.toInt())}
                 Nowy stan konta: ${formatDouble(gambler.balance)} żetonów <:peepostonks:971024543621722142>
             """.trimIndent()
         } else {
@@ -146,9 +146,19 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService) : List
                     result.outcome
                 )
             } żetonów**! :dollar:
-                Loss streak: **x${result.streak}** <a:MOOOOOOOOOO:1000802783022305290> 
+                Loss streak: **x${result.streak}** ${displayStringTimes("<a:MOOOOOOOOOO:1000802783022305290>", result.streak.toInt())} 
                 Nowy stan konta: ${formatDouble(gambler.balance)} żetonów <:peeponotstonks:971024543135174657>
             """.trimIndent()
         }
+    }
+
+    private fun displayStringTimes(string: String, times: Int): String {
+        val sb = StringBuilder()
+
+        for (i in 1 .. times) {
+            sb.append(" $string")
+        }
+
+        return sb.toString()
     }
 }
