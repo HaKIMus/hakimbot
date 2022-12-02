@@ -10,6 +10,7 @@ import com.hakim.hakimbot.gamble.table.GamblerTable
 import com.hakim.hakimbot.network.model.Profile
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.lang.Double.max
 import java.util.*
 import kotlin.random.Random
 
@@ -19,6 +20,12 @@ class Gambler(id: EntityID<UUID>) : BaseUuidEntity(id, GamblerTable){
     val uuid = id.value
     var profile by Profile referencedOn GamblerTable.profile
     var balance by GamblerTable.balance
+
+    var lossStreak by GamblerTable.lossStreak
+    var winStreak by GamblerTable.winStreak
+
+    var lossStreakMax by GamblerTable.lossStreakMax
+    var winStreakMax by GamblerTable.winStreakMax
 
     fun gamble(balancePercentage: Int): GambleResult {
         if (balancePercentage !in 1..100) {
@@ -49,12 +56,37 @@ class Gambler(id: EntityID<UUID>) : BaseUuidEntity(id, GamblerTable){
             val hasWon = Random.nextBoolean()
 
             if (hasWon) {
-                balance = (balance + (amount * 2.0))
-                return@transaction GambleResult(true, amount, amount * 2.0)
+                resetLossStreak()
+                winStreak = (winStreak + 1).toShort()
+                balance = (balance + ((amount * 2.0) * winStreak))
+                return@transaction GambleResult(true, amount, (amount * 2.0) * winStreak, winStreak)
             } else {
-                balance = (balance - amount)
-                return@transaction GambleResult(false, amount, amount)
+                resetWinStreak()
+                lossStreak = (lossStreak + 1).toShort()
+                balance = max((balance - (amount * lossStreak)), 0.0)
+
+                if (balance == 0.0) {
+                    resetLossStreak()
+                }
+
+                return@transaction GambleResult(false, amount, max((amount * lossStreak), 0.0), lossStreak)
             }
         }
+    }
+
+    private fun resetWinStreak() {
+        if (winStreak > winStreakMax) {
+            winStreakMax = winStreak
+        }
+
+        winStreak = 0
+    }
+
+    private fun resetLossStreak() {
+        if (lossStreak > lossStreakMax) {
+            lossStreakMax = lossStreak
+        }
+
+        lossStreak = 0
     }
 }

@@ -31,7 +31,7 @@ class Dependencies(private val args: Array<String>) {
 
         val common = DI.Module("common") {
             bindEagerSingleton {
-                Database.connect(getArgumentValue("dbUrl"))
+                Database.connect(getArgumentValue("dbUrl"), user = "root", password = "root")
             }
 
             bindSingleton { ExposedUtilities() }

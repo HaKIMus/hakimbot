@@ -105,13 +105,14 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService) : List
                     sb.append("**Gambling Top 10**\n")
 
                     for (i in 1..min(sorted.size, 10)) {
+                        val currentGambler = sorted[i - 1]
+
+                        val userName = userNameByDiscordId(
+                            event.guild!!,
+                            currentGambler.profile.discordUserId
+                        )
                         sb.append(
-                            "$i - ${
-                                userNameByDiscordId(
-                                    event.guild!!,
-                                    sorted[i - 1].profile.discordUserId
-                                )
-                            } z wynikiem ${formatDouble(sorted[i - 1].balance)} żetonów\n"
+                            "$i - **$userName** z wynikiem **${formatDouble(currentGambler.balance)} żetonów** i win/loss streak: **${currentGambler.winStreakMax}**/**${currentGambler.lossStreakMax}**\n"
                         )
                     }
 
@@ -135,16 +136,18 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService) : List
                     result.outcome
                 )
             } żetonów**! :dollar:
-                Nowy stan konta: ${formatDouble(gambler.balance)} żetonów
+                Win streak: **x${result.streak}** <a:MOOOOOOOOOO:1000802783022305290>
+                Nowy stan konta: ${formatDouble(gambler.balance)} żetonów <:peepostonks:971024543621722142>
             """.trimIndent()
         } else {
             """
-                <:notLikeThis:801093738353000488> Cholera! ${event.user.name} włożył ${result.investment} żetonów i przegrał **${
+                <:notLikeThis:801093738353000488> Cholera! ${event.user.name} włożył ${formatDouble(result.investment)} żetonów i przegrał **${
                 formatDouble(
                     result.outcome
                 )
             } żetonów**! :dollar:
-                Nowy stan konta: ${formatDouble(gambler.balance)} żetonów
+                Loss streak: **x${result.streak}** <a:MOOOOOOOOOO:1000802783022305290> 
+                Nowy stan konta: ${formatDouble(gambler.balance)} żetonów <:peeponotstonks:971024543135174657>
             """.trimIndent()
         }
     }
