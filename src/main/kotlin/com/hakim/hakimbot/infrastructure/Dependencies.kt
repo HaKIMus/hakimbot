@@ -5,8 +5,12 @@ import com.hakim.hakimbot.command.CheckPPCommand
 import com.hakim.hakimbot.command.DumplingCommand
 import com.hakim.hakimbot.command.TwitterCommand
 import com.hakim.hakimbot.command.WrozbitaMaciej
+import com.hakim.hakimbot.gamble.RandomEvents
 import com.hakim.hakimbot.gamble.UpsertGambleService
 import com.hakim.hakimbot.gamble.command.GambleCommand
+import com.hakim.hakimbot.gamble.event.SomeoneRobbedYou
+import com.hakim.hakimbot.gamble.event.TaxReturn
+import com.hakim.hakimbot.gamble.event.ZusCharge
 import com.hakim.hakimbot.listener.CreateProfileForUserListener
 import com.hakim.hakimbot.listener.TagMeListener
 import com.hakim.hakimbot.network.model.UpsertProfileService
@@ -16,6 +20,8 @@ import org.jetbrains.exposed.sql.Database
 import org.kodein.di.*
 
 const val LISTENER_TAG = "@listenerTag"
+const val GAMBLE_RANDOM_EVENT_TAG = "@gambleRandomEvent"
+
 class Dependencies(private val args: Array<String>) {
     val dependencies = DI {
         bindSingleton { DiscordData(getArgumentValue("discordToken")) }
@@ -48,11 +54,17 @@ class Dependencies(private val args: Array<String>) {
             bindProvider(LISTENER_TAG) { WrozbitaMaciej() }
             bindProvider(LISTENER_TAG) { TwitterCommand(instance()) }
             bindProvider(LISTENER_TAG) { CreateProfileForUserListener(instance()) }
-            bindProvider(LISTENER_TAG) { GambleCommand(instance()) }
+            bindProvider(LISTENER_TAG) { GambleCommand(instance(), instance()) }
         }
 
         val gambleGame = DI.Module("gamble") {
             bindSingleton { UpsertGambleService() }
+
+            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { ZusCharge() }
+            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { TaxReturn() }
+            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { SomeoneRobbedYou() }
+
+            bindProvider { RandomEvents(allInstances(GAMBLE_RANDOM_EVENT_TAG)) }
         }
 
         bindSingleton { TwitterFacade(instance()) }

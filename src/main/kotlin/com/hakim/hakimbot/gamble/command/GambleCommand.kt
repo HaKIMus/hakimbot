@@ -3,11 +3,10 @@ package com.hakim.hakimbot.gamble.command
 import com.hakim.hakimbot.formatDouble
 import com.hakim.hakimbot.gamble.GambleResult
 import com.hakim.hakimbot.gamble.Gambler
+import com.hakim.hakimbot.gamble.RandomEvents
 import com.hakim.hakimbot.gamble.UpsertGambleService
-import com.hakim.hakimbot.gamble.exception.InvalidPercentageRangeException
-import com.hakim.hakimbot.gamble.exception.NoAmountException
-import com.hakim.hakimbot.gamble.exception.NoBalanceException
-import com.hakim.hakimbot.gamble.exception.NotSufficientBalanceException
+import com.hakim.hakimbot.gamble.event.Event
+import com.hakim.hakimbot.gamble.exception.*
 import com.hakim.hakimbot.gamble.table.GamblerTable
 import com.hakim.hakimbot.network.model.Profile
 import com.hakim.hakimbot.network.model.ProfileTable
@@ -17,7 +16,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.jetbrains.exposed.sql.transactions.transaction
 import kotlin.math.min
 
-class GambleCommand(private val upsertGambleService: UpsertGambleService) : ListenerAdapter() {
+class GambleCommand(private val upsertGambleService: UpsertGambleService, private val randomEvents: RandomEvents) : ListenerAdapter() {
     override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
         val gambler = upsertGambleService.upsert(event.user)
 
@@ -33,7 +32,7 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService) : List
                 }
 
                 try {
-                    val result = gambler.gamble(percent)
+                    val result = gambler.gamble(percent, randomEvents)
 
                     event.hook.sendMessage(reactToResult(result, event, gambler)).queue()
                 } catch (e: NoBalanceException) {
@@ -43,7 +42,9 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService) : List
                 } catch (e: NoAmountException) {
                     event.hook.sendMessage("Musisz podać więcej niż 0 żetonów!").queue()
                 } catch (e: InvalidPercentageRangeException) {
-                    event.hook.sendMessage("Dozwolony zakres to 1 - 100 procent!").queue()
+                    event.hook.sendMessage("Dozwolony zakres to 10 - 100 procent!").queue()
+                } catch (e: Minimum10PercentOfBalance) {
+                    event.hook.sendMessage("Musisz wpłacić minimum 10% swojego stanu konta!").queue()
                 }
             }
 
@@ -57,7 +58,7 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService) : List
                 }
 
                 try {
-                    val result = gambler.gamble(amount)
+                    val result = gambler.gamble(amount, randomEvents)
 
                     event.hook.sendMessage(reactToResult(result, event, gambler)).queue()
                 } catch (e: NoBalanceException) {
@@ -66,6 +67,8 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService) : List
                     event.hook.sendMessage("Nie posiadasz wystarczająco żetonów!").queue()
                 } catch (e: NoAmountException) {
                     event.hook.sendMessage("Musisz podać więcej niż 0 żetonów!").queue()
+                } catch (e: Minimum10PercentOfBalance) {
+                    event.hook.sendMessage("Musisz wpłacić minimum 10% swojego stanu konta!").queue()
                 }
             }
 
@@ -138,6 +141,7 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService) : List
             } żetonów**! :dollar:
                 Win streak: **x${result.streak}** ${displayStringTimes("<a:MOOOOOOOOOO:1000802783022305290>", result.streak.toInt())}
                 Nowy stan konta: ${formatDouble(gambler.balance)} żetonów <:peepostonks:971024543621722142>
+                ${displayEvent(result.event, gambler)}
             """.trimIndent()
         } else {
             """
@@ -148,8 +152,17 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService) : List
             } żetonów**! :dollar:
                 Loss streak: **x${result.streak}** ${displayStringTimes("<a:MOOOOOOOOOO:1000802783022305290>", result.streak.toInt())} 
                 Nowy stan konta: ${formatDouble(gambler.balance)} żetonów <:peeponotstonks:971024543135174657>
+                ${displayEvent(result.event, gambler)}
             """.trimIndent()
         }
+    }
+
+    private fun displayEvent(event: Event?, gambler: Gambler): String {
+        if (event == null) {
+            return ""
+        }
+
+        return "O, masz! Trafiłeś wydarzenie: **${event.name}**. ${event.message(gambler)}"
     }
 
     private fun displayStringTimes(string: String, times: Int): String {

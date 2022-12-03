@@ -6,3 +6,4 @@ class InvalidPercentageRangeException(message: String?) : GambleException(messag
 class NoBalanceException(message: String?) : GambleException(message)
 class NoAmountException(message: String?) : GambleException(message)
 class NotSufficientBalanceException(message: String?) : GambleException(message)
+class Minimum10PercentOfBalance(message: String?) : GambleException(message)
