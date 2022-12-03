@@ -94,7 +94,7 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService, privat
 
                     gamblerToDonate.balance = (gamblerToDonate.balance + amount)
 
-                    event.hook.sendMessage("Użytkownik dostał żetony!").queue()
+                    event.hook.sendMessage("Użytkownik ${user.name} dostał żetony!").queue()
                 }
             }
 
@@ -120,6 +120,34 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService, privat
                     }
 
                     event.hook.sendMessage(sb.toString()).queue()
+                }
+            }
+
+            "gpozycz", "gamble-pozycz" -> {
+                event.deferReply().queue()
+
+                transaction {
+                    val user = event.getOption("user")?.asUser
+                    val amount = event.getOption("amount")?.asDouble
+
+                    if (amount == null || user == null) {
+                        event.hook.sendMessage("Podaj ilość i użytkownika!").queue()
+                        return@transaction
+                    }
+
+                    val gamblerToDonate = Gambler.find {
+                        GamblerTable.profile eq (Profile.find { ProfileTable.discordUserId eq user.id }.first().id)
+                    }.first()
+
+                    try {
+                        gambler.borrowTo(gamblerToDonate, amount)
+                    } catch (e: IllegalArgumentException) {
+                        event.hook.sendMessage(e.message.orEmpty()).queue()
+
+                        return@transaction
+                    }
+
+                    event.hook.sendMessage("Użytkownik ${event.user.name} pożyczył ${user.name} żetony!").queue()
                 }
             }
         }

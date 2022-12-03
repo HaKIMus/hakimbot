@@ -87,6 +87,17 @@ class Gambler(id: EntityID<UUID>) : BaseUuidEntity(id, GamblerTable) {
         }
     }
 
+    fun borrowTo(gambler: Gambler, amount: Double) {
+        transaction {
+            require(amount <= balance) {
+                "Nie posiadasz wystarczającej ilości gotówki!"
+            }
+
+            balance = (balance - amount)
+            gambler.balance = gambler.balance + amount
+        }
+    }
+
     private fun resetWinStreak() {
         if (winStreak > winStreakMax) {
             winStreakMax = winStreak
