@@ -1,5 +1,6 @@
 package com.hakim.hakimbot.gamble.event
 
+import com.hakim.hakimbot.formatDouble
 import com.hakim.hakimbot.gamble.Gambler
 import org.jetbrains.exposed.sql.transactions.transaction
 import kotlin.random.Random
@@ -18,6 +19,6 @@ class ZusCharge : Event {
     }
 
     override fun message(gambler: Gambler): String {
-        return "Opłata ZUS wyniosła Cię **${chargePercent.times(gambler.balance)} żetonów**!"
+        return "Opłata ZUS wyniosła Cię **${formatDouble(chargePercent.times(gambler.balance))} żetonów**!"
     }
 }

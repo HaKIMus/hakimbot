@@ -1,5 +1,6 @@
 package com.hakim.hakimbot.gamble.event
 
+import com.hakim.hakimbot.formatDouble
 import com.hakim.hakimbot.gamble.Gambler
 import org.jetbrains.exposed.sql.transactions.transaction
 import kotlin.random.Random
@@ -18,6 +19,6 @@ class SomeoneRobbedYou : Event {
     }
 
     override fun message(gambler: Gambler): String {
-        return "Skradziono Ci **${(chargePercent.times(gambler.balance))} żetonów**. Almost had a thousand dollars 'til someone broke in and stole it and it broke your momma's heart."
+        return "Skradziono Ci **${formatDouble(chargePercent.times(gambler.balance))} żetonów**. Almost had a thousand dollars 'til someone broke in and stole it and it broke your momma's heart."
     }
 }

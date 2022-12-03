@@ -1,5 +1,6 @@
 package com.hakim.hakimbot.gamble.event
 
+import com.hakim.hakimbot.formatDouble
 import com.hakim.hakimbot.gamble.Gambler
 import org.jetbrains.exposed.sql.transactions.transaction
 import kotlin.random.Random
@@ -17,6 +18,6 @@ class TaxReturn : Event {
     }
 
     override fun message(gambler: Gambler): String {
-        return "Server zwrócił Ci **${(chargePercent.times(gambler.balance))} żetonów** nadpłaty!"
+        return "Server zwrócił Ci **${formatDouble(chargePercent.times(gambler.balance))} żetonów** nadpłaty!"
     }
 }

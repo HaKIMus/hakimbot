@@ -103,6 +103,12 @@ class Main {
                     .addOption(OptionType.USER, "user", "Użytkownik, który ma dostać żetony", true)
                     .addOption(OptionType.NUMBER, "amount", "Ile żetonów", true)
                     .setDefaultPermissions(DefaultMemberPermissions.DISABLED),
+                Commands.slash("gpozycz", "Pożycz użytkownikowi żetony")
+                    .addOption(OptionType.USER, "user", "Użytkownik, który ma dostać żetony", true)
+                    .addOption(OptionType.NUMBER, "amount", "Ile żetonów", true),
+                Commands.slash("gamble-pozycz", "Pożycz użytkownikowi żetony")
+                    .addOption(OptionType.USER, "user", "Użytkownik, który ma dostać żetony", true)
+                    .addOption(OptionType.NUMBER, "amount", "Ile żetonów", true),
                 ).queue()
         }
     }
