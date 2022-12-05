@@ -1,5 +1,6 @@
 package com.hakim.hakimbot
 
+import com.hakim.hakimbot.command.LOVE_OR_NOT_COMMAND_PRICE
 import com.hakim.hakimbot.infrastructure.Dependencies
 import com.hakim.hakimbot.infrastructure.ExposedUtilities
 import com.hakim.hakimbot.infrastructure.LISTENER_TAG
@@ -24,7 +25,6 @@ import org.kodein.di.DI
 import org.kodein.di.allInstances
 import org.kodein.di.instance
 import java.text.DecimalFormat
-import com.hakim.hakimbot.command.LOVE_OR_NOT_COMMAND_PRICE
 
 const val RANDOM_CHANNEL_ID = "968482612031135806"
 const val GOLD_QUOTES_CHANNEL_ID = "968619009786392606"
@@ -111,9 +111,9 @@ class Main {
                     .addOption(OptionType.USER, "user", "Użytkownik, który ma dostać żetony", true)
                     .addOption(OptionType.NUMBER, "amount", "Ile żetonów", true),
                 Commands.slash("czy", "Sprawdź czy to prawda")
-                    .addOption(OptionType.String, "statement", "Co chcesz sprawdzić", true),
-                Commands.slash("love-or-not", "Sprawdź czy kocha | koszt: ${LOVE_OR_NOT_COMMAND_PRICE}")
-                    .addOption(OptionType.User, "user", "Użytkownik do sprawdzenia", true),
+                    .addOption(OptionType.STRING, "statement", "Co chcesz sprawdzić", true),
+                Commands.slash("love-or-not", "Sprawdź czy kocha | koszt: $LOVE_OR_NOT_COMMAND_PRICE")
+                    .addOption(OptionType.USER, "user", "Użytkownik do sprawdzenia", true),
                 ).queue()
         }
     }

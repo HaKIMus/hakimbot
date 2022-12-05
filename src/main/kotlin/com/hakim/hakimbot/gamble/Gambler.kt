@@ -1,5 +1,6 @@
 package com.hakim.hakimbot.gamble
 
+import Product
 import com.hakim.hakimbot.common.exposed.BaseUuidEntity
 import com.hakim.hakimbot.common.exposed.BaseUuidEntityClass
 import com.hakim.hakimbot.gamble.exception.*

@@ -1,10 +1,7 @@
 package com.hakim.hakimbot.infrastructure
 
 import com.hakim.hakimbot.DiscordData
-import com.hakim.hakimbot.command.CheckPPCommand
-import com.hakim.hakimbot.command.DumplingCommand
-import com.hakim.hakimbot.command.TwitterCommand
-import com.hakim.hakimbot.command.WrozbitaMaciej
+import com.hakim.hakimbot.command.*
 import com.hakim.hakimbot.gamble.RandomEvents
 import com.hakim.hakimbot.gamble.UpsertGambleService
 import com.hakim.hakimbot.gamble.command.GambleCommand
