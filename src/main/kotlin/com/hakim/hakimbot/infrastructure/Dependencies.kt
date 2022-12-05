@@ -1,10 +1,7 @@
 package com.hakim.hakimbot.infrastructure
 
 import com.hakim.hakimbot.DiscordData
-import com.hakim.hakimbot.command.CheckPPCommand
-import com.hakim.hakimbot.command.DumplingCommand
-import com.hakim.hakimbot.command.TwitterCommand
-import com.hakim.hakimbot.command.WrozbitaMaciej
+import com.hakim.hakimbot.command.*
 import com.hakim.hakimbot.gamble.RandomEvents
 import com.hakim.hakimbot.gamble.UpsertGambleService
 import com.hakim.hakimbot.gamble.command.GambleCommand
@@ -55,6 +52,8 @@ class Dependencies(private val args: Array<String>) {
             bindProvider(LISTENER_TAG) { TwitterCommand(instance()) }
             bindProvider(LISTENER_TAG) { CreateProfileForUserListener(instance()) }
             bindProvider(LISTENER_TAG) { GambleCommand(instance(), instance()) }
+            bindProvider(LISTENER_TAG) { IsItTrue() }
+            bindProvider(LISTENER_TAG) { LoveOrNot(instance()) }
         }
 
         val gambleGame = DI.Module("gamble") {

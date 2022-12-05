@@ -1,5 +1,6 @@
 package com.hakim.hakimbot.gamble
 
+import Product
 import com.hakim.hakimbot.common.exposed.BaseUuidEntity
 import com.hakim.hakimbot.common.exposed.BaseUuidEntityClass
 import com.hakim.hakimbot.gamble.exception.*
@@ -95,6 +96,16 @@ class Gambler(id: EntityID<UUID>) : BaseUuidEntity(id, GamblerTable) {
 
             balance = (balance - amount)
             gambler.balance = gambler.balance + amount
+        }
+    }
+
+    fun buy(product: Product) {
+        transaction {
+            require(balance >= product.price) {
+                "Nie posiadasz wystarczającej ilości gotówki!"
+            }
+
+            balance = (balance - product.price)
         }
     }
 

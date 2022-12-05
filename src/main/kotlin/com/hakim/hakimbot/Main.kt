@@ -1,5 +1,6 @@
 package com.hakim.hakimbot
 
+import com.hakim.hakimbot.command.LOVE_OR_NOT_COMMAND_PRICE
 import com.hakim.hakimbot.infrastructure.Dependencies
 import com.hakim.hakimbot.infrastructure.ExposedUtilities
 import com.hakim.hakimbot.infrastructure.LISTENER_TAG
@@ -109,6 +110,10 @@ class Main {
                 Commands.slash("gamble-pozycz", "Pożycz użytkownikowi żetony")
                     .addOption(OptionType.USER, "user", "Użytkownik, który ma dostać żetony", true)
                     .addOption(OptionType.NUMBER, "amount", "Ile żetonów", true),
+                Commands.slash("czy", "Sprawdź czy to prawda")
+                    .addOption(OptionType.STRING, "statement", "Co chcesz sprawdzić", true),
+                Commands.slash("love-or-not", "Sprawdź czy kocha | koszt: $LOVE_OR_NOT_COMMAND_PRICE")
+                    .addOption(OptionType.USER, "user", "Użytkownik do sprawdzenia", true),
                 ).queue()
         }
     }
