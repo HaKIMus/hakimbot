@@ -98,6 +98,16 @@ class Gambler(id: EntityID<UUID>) : BaseUuidEntity(id, GamblerTable) {
         }
     }
 
+    fun buy(product: Product) {
+        transaction {
+            require(balance >= product.price) {
+                "Nie posiadasz wystarczającej ilości gotówki!"
+            }
+
+            balance = (balance - product.price)
+        }
+    }
+
     private fun resetWinStreak() {
         if (winStreak > winStreakMax) {
             winStreakMax = winStreak

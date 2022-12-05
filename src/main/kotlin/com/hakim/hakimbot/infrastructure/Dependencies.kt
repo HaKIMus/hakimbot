@@ -55,6 +55,8 @@ class Dependencies(private val args: Array<String>) {
             bindProvider(LISTENER_TAG) { TwitterCommand(instance()) }
             bindProvider(LISTENER_TAG) { CreateProfileForUserListener(instance()) }
             bindProvider(LISTENER_TAG) { GambleCommand(instance(), instance()) }
+            bindProvider(LISTENER_TAG) { IsItTrue() }
+            bindProvider(LISTENER_TAG) { LoveOrNot(instance()) }
         }
 
         val gambleGame = DI.Module("gamble") {
