@@ -3,6 +3,7 @@ package com.hakim.hakimbot.gamble.event
 import com.hakim.hakimbot.formatDouble
 import com.hakim.hakimbot.gamble.Gambler
 import org.jetbrains.exposed.sql.transactions.transaction
+import kotlin.properties.Delegates
 import kotlin.random.Random
 
 class TaxReturn : Event {
@@ -10,14 +11,16 @@ class TaxReturn : Event {
     override val description: String = "Pan z kotem Cię szuka!"
     override val type: EventType = EventType.POSITIVE
     private val chargePercent = Random.nextDouble(0.10, 0.20)
+    private var result by Delegates.notNull<Double>()
 
     override fun onApply(gambler: Gambler) {
         transaction {
-            gambler.balance = (gambler.balance + (chargePercent.times(gambler.balance)))
+            result = chargePercent.times(gambler.balance)
+            gambler.balance = (gambler.balance + result)
         }
     }
 
     override fun message(gambler: Gambler): String {
-        return "Server zwrócił Ci **${formatDouble(chargePercent.times(gambler.balance))} żetonów** nadpłaty!"
+        return "Server zwrócił Ci **${formatDouble(result)} żetonów** nadpłaty!"
     }
 }
