@@ -5,9 +5,7 @@ import com.hakim.hakimbot.command.*
 import com.hakim.hakimbot.gamble.RandomEvents
 import com.hakim.hakimbot.gamble.UpsertGambleService
 import com.hakim.hakimbot.gamble.command.GambleCommand
-import com.hakim.hakimbot.gamble.event.SomeoneRobbedYou
-import com.hakim.hakimbot.gamble.event.TaxReturn
-import com.hakim.hakimbot.gamble.event.ZusCharge
+import com.hakim.hakimbot.gamble.event.*
 import com.hakim.hakimbot.listener.CreateProfileForUserListener
 import com.hakim.hakimbot.listener.TagMeListener
 import com.hakim.hakimbot.network.model.UpsertProfileService
@@ -62,6 +60,8 @@ class Dependencies(private val args: Array<String>) {
             bindProvider(GAMBLE_RANDOM_EVENT_TAG) { ZusCharge() }
             bindProvider(GAMBLE_RANDOM_EVENT_TAG) { TaxReturn() }
             bindProvider(GAMBLE_RANDOM_EVENT_TAG) { SomeoneRobbedYou() }
+            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { SomeoneHackedYou() }
+            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { LotteryWin() }
 
             bindProvider { RandomEvents(allInstances(GAMBLE_RANDOM_EVENT_TAG)) }
         }
