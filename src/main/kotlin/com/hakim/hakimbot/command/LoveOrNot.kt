@@ -1,6 +1,6 @@
 package com.hakim.hakimbot.command
 
-import Product
+import com.hakim.hakimbot.gamble.Product
 import com.hakim.hakimbot.gamble.UpsertGambleService
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
