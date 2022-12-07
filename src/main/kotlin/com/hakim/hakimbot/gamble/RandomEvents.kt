@@ -2,15 +2,19 @@ package com.hakim.hakimbot.gamble
 
 import com.hakim.hakimbot.gamble.event.Event
 import com.hakim.hakimbot.gamble.event.EventType
+import kotlin.math.abs
 import kotlin.random.Random
 
 class RandomEvents(private val events: List<Event>) {
     fun randomEvent(): Event? {
-        val randomizedEvents = events.map {
-            randomizeByType(it) to it
-        }.toMap()
+        val randomizedEvents = events.associateBy {
+            randomizeByType(it)
+        }
 
-        return randomizedEvents.filterKeys { it }.values.randomOrNull()
+        return randomizedEvents
+            .filterKeys { it }
+            .values
+            .maxByOrNull { abs(it.type.value) }
     }
 
     private fun randomizeByType(event: Event): Boolean {
