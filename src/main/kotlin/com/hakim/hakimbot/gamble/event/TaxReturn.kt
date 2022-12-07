@@ -11,11 +11,12 @@ class TaxReturn : Event {
     override val description: String = "Pan z kotem Cię szuka!"
     override val type: EventType = EventType.POSITIVE
     private val chargePercent = Random.nextDouble(0.10, 0.20)
+    private val balanceBooster = Random.nextInt(1, 5)
     private var result by Delegates.notNull<Double>()
 
     override fun onApply(gambler: Gambler) {
         transaction {
-            result = chargePercent.times(gambler.balance)
+            result = chargePercent.times(gambler.balance * balanceBooster)
             gambler.balance = (gambler.balance + result)
         }
     }

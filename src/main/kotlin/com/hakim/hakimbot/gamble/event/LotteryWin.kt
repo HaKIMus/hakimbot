@@ -11,11 +11,12 @@ class LotteryWin : Event {
     override val description: String = "Wygrałeś w lotto!"
     override val type: EventType = EventType.VERY_POSITIVE
     private val chargePercent = Random.nextDouble(0.50, 0.80)
+    private val balanceBooster = Random.nextInt(4, 10)
     private var result by Delegates.notNull<Double>()
 
     override fun onApply(gambler: Gambler) {
         transaction {
-            result = chargePercent.times(gambler.balance)
+            result = chargePercent.times(gambler.balance * balanceBooster)
             gambler.balance = (gambler.balance + result)
         }
     }
