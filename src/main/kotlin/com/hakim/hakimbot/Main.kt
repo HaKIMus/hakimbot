@@ -77,6 +77,7 @@ class Main {
                 Commands.slash("zjedz-pierożka", "Masno"),
                 Commands
                     .slash("twitter", "Ćwierk")
+                    .addOption(OptionType.NUMBER, "twitterId", "User twitter id", true)
                     .setDefaultPermissions(DefaultMemberPermissions.DISABLED),
                 Commands
                     .slash("maja", "Ćwierka maja")
