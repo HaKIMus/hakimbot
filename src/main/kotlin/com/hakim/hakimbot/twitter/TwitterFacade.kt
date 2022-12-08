@@ -18,4 +18,8 @@ class TwitterFacade(twitterData: TwitterData) {
     fun readUserTweets(userId: Long): List<Tweet> {
         return twitterApi.searchRecent("from:$userId -is:retweet -is:quote -is:reply", maxResults = 10).tweets
     }
+
+    fun tweetAuthorName(id: Long): String {
+        return twitterApi.getUsers(id).users.first().name
+    }
 }
