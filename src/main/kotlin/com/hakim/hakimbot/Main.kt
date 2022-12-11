@@ -6,6 +6,14 @@ import com.hakim.hakimbot.infrastructure.ExposedUtilities
 import com.hakim.hakimbot.infrastructure.LISTENER_TAG
 import com.hakim.hakimbot.job.DailyCoins
 import com.hakim.hakimbot.job.GoldQuoteOfTheDay
+import com.hakim.hakimbot.network.model.Profile
+import com.hakim.hakimbot.wars.domain.Army
+import com.hakim.hakimbot.wars.domain.General
+import com.hakim.hakimbot.wars.domain.unit.UnitType
+import com.hakim.hakimbot.wars.model.ArmyModel
+import com.hakim.hakimbot.wars.model.GeneralModel
+import com.hakim.hakimbot.wars.model.UnitModel
+import com.hakim.hakimbot.wars.model.table.UnitTable
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newFixedThreadPoolContext
@@ -21,20 +29,25 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
+import org.jetbrains.exposed.sql.SizedCollection
+import org.jetbrains.exposed.sql.emptySized
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kodein.di.DI
 import org.kodein.di.allInstances
 import org.kodein.di.instance
 import java.text.DecimalFormat
+import java.util.*
 
 const val RANDOM_CHANNEL_ID = "968482612031135806"
 const val GOLD_QUOTES_CHANNEL_ID = "968619009786392606"
 const val ADMIN_DEVELOPERS_CHANNEL_ID = "1047882371573239901"
 const val HAKIMPL_GUILD_ID = "968482610932236298"
-const val UNDER_DEVELOPMENT = false
+const val UNDER_DEVELOPMENT = true
 
 class Main {
     companion object {
         private lateinit var container: DI
+
         @OptIn(DelicateCoroutinesApi::class)
         private val jobsThread = newFixedThreadPoolContext(2, "jobs")
 
@@ -72,12 +85,14 @@ class Main {
                 launch { dailyCoinsJob.execute() }
             }
 
+            //testWar()
+
             jda.updateCommands().addCommands(
                 Commands.slash("ping", "Oblicz ping tego bota"),
                 Commands.slash("zjedz-pierożka", "Masno"),
                 Commands
                     .slash("twitter", "Ćwierk")
-                    .addOption(OptionType.NUMBER, "twitterId", "User twitter id", true)
+                    .addOption(OptionType.NUMBER, "twitter_id", "User twitter id", true)
                     .setDefaultPermissions(DefaultMemberPermissions.DISABLED),
                 Commands
                     .slash("maja", "Ćwierka maja")
@@ -116,7 +131,36 @@ class Main {
                     .addOption(OptionType.STRING, "statement", "Co chcesz sprawdzić", true),
                 Commands.slash("love-or-not", "Sprawdź czy kocha | koszt: $LOVE_OR_NOT_COMMAND_PRICE")
                     .addOption(OptionType.USER, "user", "Użytkownik do sprawdzenia", true),
-                ).queue()
+                Commands
+                    .slash("atak", "Zaatakuj innego gracza")
+                    .addOption(OptionType.USER, "user", "Kogo chcesz zaatakować", true)
+                    .setDefaultPermissions(DefaultMemberPermissions.DISABLED),
+            ).queue()
+        }
+
+        private fun testWar() {
+            transaction {
+                val general = GeneralModel.new(UUID.randomUUID()) {
+                    profile = Profile.findById(UUID.fromString("3ffbf295-6dd2-4ead-b6cb-3acec094a600"))!!
+                    honorPoints = 100
+                }
+
+                val unit = UnitModel.new(UUID.randomUUID()) {
+                    type = UnitType.MELEE.name
+                    name = "Soldier"
+                    healthPoints = 12
+                    meleeProtection = 30
+                    rangeProtection = 15
+                    damageMin = 5.0
+                    damageMax = 10.0
+                }
+
+                ArmyModel.new(UUID.randomUUID()) {
+                    this.unit = unit
+                    this.general = general
+                    this.amount = 3000
+                }
+            }
         }
     }
 }

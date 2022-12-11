@@ -15,7 +15,7 @@ class TwitterCommand(private val twitterFacade: TwitterFacade) : ListenerAdapter
             "twitter" -> {
                 event.deferReply().queue()
 
-                val twitterId = event.getOption("twitterId")?.asLong ?: return
+                val twitterId = event.getOption("twitter_id")?.asLong ?: return
                 val elonMuskTweets = twitterFacade.readUserTweets(twitterId)
 
                 event.hook.sendMessageEmbeds(buildEbForTweet(elonMuskTweets.first())).queue()

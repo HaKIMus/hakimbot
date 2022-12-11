@@ -11,6 +11,8 @@ import com.hakim.hakimbot.listener.TagMeListener
 import com.hakim.hakimbot.network.model.UpsertProfileService
 import com.hakim.hakimbot.twitter.TwitterData
 import com.hakim.hakimbot.twitter.TwitterFacade
+import com.hakim.hakimbot.wars.model.service.TranslateModelToDomain
+import com.hakim.hakimbot.wars.ui.command.AttackCmd
 import org.jetbrains.exposed.sql.Database
 import org.kodein.di.*
 
@@ -52,6 +54,7 @@ class Dependencies(private val args: Array<String>) {
             bindProvider(LISTENER_TAG) { GambleCommand(instance(), instance()) }
             bindProvider(LISTENER_TAG) { IsItTrue() }
             bindProvider(LISTENER_TAG) { LoveOrNot(instance()) }
+            bindProvider(LISTENER_TAG) { AttackCmd(instance()) }
         }
 
         val gambleGame = DI.Module("gamble") {
@@ -66,8 +69,13 @@ class Dependencies(private val args: Array<String>) {
             bindProvider { RandomEvents(allInstances(GAMBLE_RANDOM_EVENT_TAG)) }
         }
 
+        val warGame = DI.Module("war") {
+            bindSingleton { TranslateModelToDomain() }
+        }
+
         bindSingleton { TwitterFacade(instance()) }
 
+        import(warGame)
         import(gambleGame)
         import(common)
         import(services)
