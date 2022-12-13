@@ -9,10 +9,16 @@ import com.hakim.hakimbot.gamble.event.*
 import com.hakim.hakimbot.listener.CreateProfileForUserListener
 import com.hakim.hakimbot.listener.TagMeListener
 import com.hakim.hakimbot.network.model.UpsertProfileService
+import com.hakim.hakimbot.network.model.repository.ProfileRepository
+import com.hakim.hakimbot.network.service.CreateProfileForNewDiscordServerUserService
 import com.hakim.hakimbot.twitter.TwitterData
 import com.hakim.hakimbot.twitter.TwitterFacade
+import com.hakim.hakimbot.wars.listener.CreateGeneralForNewDiscordServerUserService
 import com.hakim.hakimbot.wars.model.service.TranslateModelToDomain
+import com.hakim.hakimbot.wars.service.CreateGeneralFromDiscordUser
+import com.hakim.hakimbot.wars.service.WarRepository
 import com.hakim.hakimbot.wars.ui.command.AttackCmd
+import com.hakim.hakimbot.wars.ui.command.CreateGeneralForEachUser
 import org.jetbrains.exposed.sql.Database
 import org.kodein.di.*
 
@@ -54,7 +60,8 @@ class Dependencies(private val args: Array<String>) {
             bindProvider(LISTENER_TAG) { GambleCommand(instance(), instance()) }
             bindProvider(LISTENER_TAG) { IsItTrue() }
             bindProvider(LISTENER_TAG) { LoveOrNot(instance()) }
-            bindProvider(LISTENER_TAG) { AttackCmd(instance()) }
+            bindProvider(LISTENER_TAG) { CreateProfileForNewDiscordServerUserService() }
+            bindProvider(LISTENER_TAG) { CreateProfileForEachUser() }
         }
 
         val gambleGame = DI.Module("gamble") {
@@ -71,9 +78,16 @@ class Dependencies(private val args: Array<String>) {
 
         val warGame = DI.Module("war") {
             bindSingleton { TranslateModelToDomain() }
+            bindSingleton { CreateGeneralFromDiscordUser(instance()) }
+            bindSingleton { WarRepository(instance()) }
+
+            bindProvider(LISTENER_TAG) { AttackCmd(instance(), instance()) }
+            bindProvider(LISTENER_TAG) { CreateGeneralForNewDiscordServerUserService(instance()) }
+            bindProvider(LISTENER_TAG) { CreateGeneralForEachUser(instance()) }
         }
 
         bindSingleton { TwitterFacade(instance()) }
+        bindSingleton { ProfileRepository() }
 
         import(warGame)
         import(gambleGame)

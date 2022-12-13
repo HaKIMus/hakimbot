@@ -6,14 +6,8 @@ import com.hakim.hakimbot.infrastructure.ExposedUtilities
 import com.hakim.hakimbot.infrastructure.LISTENER_TAG
 import com.hakim.hakimbot.job.DailyCoins
 import com.hakim.hakimbot.job.GoldQuoteOfTheDay
-import com.hakim.hakimbot.network.model.Profile
-import com.hakim.hakimbot.wars.domain.Army
-import com.hakim.hakimbot.wars.domain.General
 import com.hakim.hakimbot.wars.domain.unit.UnitType
-import com.hakim.hakimbot.wars.model.ArmyModel
-import com.hakim.hakimbot.wars.model.GeneralModel
 import com.hakim.hakimbot.wars.model.UnitModel
-import com.hakim.hakimbot.wars.model.table.UnitTable
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newFixedThreadPoolContext
@@ -29,8 +23,6 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
-import org.jetbrains.exposed.sql.SizedCollection
-import org.jetbrains.exposed.sql.emptySized
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.kodein.di.DI
 import org.kodein.di.allInstances
@@ -85,8 +77,6 @@ class Main {
                 launch { dailyCoinsJob.execute() }
             }
 
-            //testWar()
-
             jda.updateCommands().addCommands(
                 Commands.slash("ping", "Oblicz ping tego bota"),
                 Commands.slash("zjedz-pierożka", "Masno"),
@@ -129,36 +119,32 @@ class Main {
                     .addOption(OptionType.NUMBER, "amount", "Ile żetonów", true),
                 Commands.slash("czy", "Sprawdź czy to prawda")
                     .addOption(OptionType.STRING, "statement", "Co chcesz sprawdzić", true),
+                Commands.slash("admin-upsert-profiles", "Create profile for each user")
+                    .setDefaultPermissions(DefaultMemberPermissions.DISABLED),
                 Commands.slash("love-or-not", "Sprawdź czy kocha | koszt: $LOVE_OR_NOT_COMMAND_PRICE")
                     .addOption(OptionType.USER, "user", "Użytkownik do sprawdzenia", true),
                 Commands
                     .slash("atak", "Zaatakuj innego gracza")
-                    .addOption(OptionType.USER, "user", "Kogo chcesz zaatakować", true)
+                    .addOption(OptionType.USER, "user", "Kogo chcesz zaatakować", true),
+                Commands
+                    .slash("awar-upsert-generals", "Creates generals for users")
                     .setDefaultPermissions(DefaultMemberPermissions.DISABLED),
+                Commands.slash("kup-armie", "Kup jednostki do swojej armii")
+                    .addOption(OptionType.STRING, "unit", "Typ jednostki")
+                    .addOption(OptionType.NUMBER, "amount", "Ilość")
             ).queue()
         }
 
         private fun testWar() {
             transaction {
-                val general = GeneralModel.new(UUID.randomUUID()) {
-                    profile = Profile.findById(UUID.fromString("3ffbf295-6dd2-4ead-b6cb-3acec094a600"))!!
-                    honorPoints = 100
-                }
-
-                val unit = UnitModel.new(UUID.randomUUID()) {
+                UnitModel.new(UUID.randomUUID()) {
                     type = UnitType.MELEE.name
-                    name = "Soldier"
+                    name = "Wojownik"
                     healthPoints = 12
                     meleeProtection = 30
                     rangeProtection = 15
                     damageMin = 5.0
                     damageMax = 10.0
-                }
-
-                ArmyModel.new(UUID.randomUUID()) {
-                    this.unit = unit
-                    this.general = general
-                    this.amount = 3000
                 }
             }
         }

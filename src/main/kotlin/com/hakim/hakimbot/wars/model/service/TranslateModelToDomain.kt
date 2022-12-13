@@ -9,38 +9,42 @@ import com.hakim.hakimbot.wars.domain.unit.UnitDamageRange
 import com.hakim.hakimbot.wars.domain.unit.UnitType
 import com.hakim.hakimbot.wars.model.ArmyModel
 import com.hakim.hakimbot.wars.model.GeneralModel
+import com.hakim.hakimbot.wars.model.UnitModel
 import com.hakim.hakimbot.wars.model.table.ArmyTable
 import org.jetbrains.exposed.sql.SizedIterable
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 class TranslateModelToDomain {
     fun translateGeneralModelToDomain(model: GeneralModel): General {
         return General(
             model.uuid,
-            xdfsdfgsd(ArmyModel.find { ArmyTable.general eq model.uuid }),
+            translateArmyModelToArmiesDomain(ArmyModel.find { ArmyTable.general eq model.uuid }),
             model.honorPoints
         )
     }
 
-    private fun xdfsdfgsd(x: SizedIterable<ArmyModel>): Armies {
+    private fun translateArmyModelToArmiesDomain(armyModels: SizedIterable<ArmyModel>): Armies {
         return Armies(
-            x.toList()
+            armyModels.toList()
                 .map {
                     Army(
-                        Unit(
-                            UnitType.valueOf(it.unit.type),
-                            it.unit.name,
-                            it.unit.healthPoints,
-                            UnitAttackProtection(it.unit.meleeProtection),
-                            UnitAttackProtection(it.unit.rangeProtection),
-                            UnitDamageRange(
-                                it.unit.damageMin,
-                                it.unit.damageMax,
-                            )
-                        ),
+                        translateUnitModelToUnitDomain(it.unit),
                         it.amount
                     )
                 }
+        )
+    }
+
+    private fun translateUnitModelToUnitDomain(unitModel: UnitModel): Unit {
+        return Unit(
+            UnitType.valueOf(unitModel.type),
+            unitModel.name,
+            unitModel.healthPoints,
+            UnitAttackProtection(unitModel.meleeProtection),
+            UnitAttackProtection(unitModel.rangeProtection),
+            UnitDamageRange(
+                unitModel.damageMin,
+                unitModel.damageMax,
+            )
         )
     }
 }
