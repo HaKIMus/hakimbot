@@ -17,6 +17,7 @@ class TranslateModelToDomain {
     fun translateGeneralModelToDomain(model: GeneralModel): General {
         return General(
             model.uuid,
+            model.profile,
             translateArmyModelToArmiesDomain(ArmyModel.find { ArmyTable.general eq model.uuid }),
             model.honorPoints
         )
@@ -44,7 +45,8 @@ class TranslateModelToDomain {
             UnitDamageRange(
                 unitModel.damageMin,
                 unitModel.damageMax,
-            )
+            ),
+            unitModel.price,
         )
     }
 }

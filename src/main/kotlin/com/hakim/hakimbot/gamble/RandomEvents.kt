@@ -2,8 +2,8 @@ package com.hakim.hakimbot.gamble
 
 import com.hakim.hakimbot.gamble.event.Event
 import com.hakim.hakimbot.gamble.event.EventType
+import com.hakim.hakimbot.randomize
 import kotlin.math.abs
-import kotlin.random.Random
 
 class RandomEvents(private val events: List<Event>) {
     fun randomEvent(): Event? {
@@ -26,9 +26,5 @@ class RandomEvents(private val events: List<Event>) {
             EventType.NEGATIVE -> randomize(6.00)
             EventType.VERY_NEGATIVE -> randomize(4.00)
         }
-    }
-
-    private fun randomize(chance: Double): Boolean {
-        return Random.nextDouble(0.01, 100.0) < chance
     }
 }

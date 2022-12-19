@@ -1,9 +1,11 @@
 package com.hakim.hakimbot.wars.domain
 
-import java.util.UUID
+import com.hakim.hakimbot.network.model.Profile
+import java.util.*
 
 class General(
     val id: UUID,
+    val profile: Profile,
     val army: Armies,
     private var _honorPoints: Int,
 ) {

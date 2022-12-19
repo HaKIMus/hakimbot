@@ -29,6 +29,7 @@ import org.kodein.di.allInstances
 import org.kodein.di.instance
 import java.text.DecimalFormat
 import java.util.*
+import kotlin.random.Random
 
 const val RANDOM_CHANNEL_ID = "968482612031135806"
 const val GOLD_QUOTES_CHANNEL_ID = "968619009786392606"
@@ -82,7 +83,7 @@ class Main {
                 Commands.slash("zjedz-pierożka", "Masno"),
                 Commands
                     .slash("twitter", "Ćwierk")
-                    .addOption(OptionType.NUMBER, "twitter_id", "User twitter id", true)
+                    .addOption(OptionType.INTEGER, "twitter_id", "User twitter id", true)
                     .setDefaultPermissions(DefaultMemberPermissions.DISABLED),
                 Commands
                     .slash("maja", "Ćwierka maja")
@@ -131,7 +132,7 @@ class Main {
                     .setDefaultPermissions(DefaultMemberPermissions.DISABLED),
                 Commands.slash("kup-armie", "Kup jednostki do swojej armii")
                     .addOption(OptionType.STRING, "unit", "Typ jednostki")
-                    .addOption(OptionType.NUMBER, "amount", "Ilość")
+                    .addOption(OptionType.INTEGER, "amount", "Ilość")
             ).queue()
         }
 
@@ -168,4 +169,8 @@ fun <T : Channel?> changeChannelOnDevelopment(jda: JDA, channel: T): Channel? {
 fun formatDouble(double: Double): String {
     val decimalFormat = DecimalFormat("#.##")
     return decimalFormat.format(double)
+}
+
+fun randomize(chance: Double): Boolean {
+    return Random.nextDouble(0.01, 100.0) < chance
 }

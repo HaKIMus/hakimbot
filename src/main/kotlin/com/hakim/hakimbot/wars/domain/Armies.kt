@@ -1,6 +1,8 @@
 package com.hakim.hakimbot.wars.domain
 
+import com.hakim.hakimbot.randomize
 import com.hakim.hakimbot.wars.domain.unit.UnitType
+import kotlin.math.max
 import kotlin.math.roundToInt
 
 class Armies(private val army: List<Army>) : Comparable<Armies> {
@@ -30,40 +32,63 @@ class Armies(private val army: List<Army>) : Comparable<Armies> {
         return x + y
     }
 
+    /**
+     * @TODO Refactor
+     */
     fun attack(opponentArmy: Armies): Pair<Int, Rounds> {
         val rounds = Rounds(mutableListOf())
         var opponentArmyHealth = opponentArmy.totalArmyHealth
         var armyHealth = totalArmyHealth
 
         while (opponentArmyHealth > 0 && armyHealth > 0) {
-            val armyDamageChunks = randomTotalArmyDamage(army) / 2
-            val opponentArmyDamageChunks = randomTotalArmyDamage(opponentArmy.army) / 2
+            val armyDamageChunks = randomTotalArmyDamage(army, true) / 2
+            var opponentArmyDamageChunks = randomTotalArmyDamage(opponentArmy.army, false) / 2
 
             opponentArmyHealth -= armyDamageChunks.roundToInt()
-            armyHealth -= opponentArmyDamageChunks.roundToInt()
+            if (opponentArmyHealth > 0) {
+                armyHealth -= opponentArmyDamageChunks.roundToInt()
+            } else {
+                opponentArmyDamageChunks = 0.0
+            }
 
             val round = Round(
                 armyDamageChunks,
                 opponentArmyDamageChunks,
-                opponentArmyHealth,
-                armyHealth
+                max(armyHealth, 0),
+                max(opponentArmyHealth, 0),
             )
 
             rounds.appendRound(round)
         }
 
-        return Pair(armyHealth compareTo opponentArmyHealth, rounds)
+        return Pair(max(armyHealth, 0) compareTo max(opponentArmyHealth, 0), rounds)
     }
 
-    private fun randomTotalArmyDamage(army: List<Army>): Double {
-        val meleeDmg = army.filter { it.unit.type == UnitType.MELEE }.sumOf {
+    private fun randomTotalArmyDamage(army: List<Army>, isAttackerArmy: Boolean): Double {
+        var meleeDmg = army.filter { it.unit.type == UnitType.MELEE }.sumOf {
             it.unit.damage.randomDamageBetweenRange() * it.amount
         }
 
-        val rangeDmg = army.filter { it.unit.type == UnitType.RANGE }.sumOf {
+        var rangeDmg = army.filter { it.unit.type == UnitType.RANGE }.sumOf {
             it.unit.damage.randomDamageBetweenRange() * it.amount
+        }
+
+        if (randomize(10.0)) {
+            meleeDmg += 0.50 * meleeDmg
+            rangeDmg += 0.50 * rangeDmg
+        }
+
+        if (!isAttackerArmy) {
+            meleeDmg = applyDefenderDamageBuff(meleeDmg)
+            rangeDmg = applyDefenderDamageBuff(rangeDmg)
         }
 
         return meleeDmg + rangeDmg
+    }
+
+    private fun applyDefenderDamageBuff(rawDamage: Double): Double {
+        val buff = 0.10 * rawDamage
+
+        return rawDamage + buff
     }
 }

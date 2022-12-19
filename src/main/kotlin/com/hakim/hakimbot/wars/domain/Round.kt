@@ -4,5 +4,5 @@ data class Round(
     val attackerDamage: Double,
     val opponentDamage: Double,
     val attackerHealth: Int,
-    val opponentHealth: Int
+    val opponentHealth: Int,
 )

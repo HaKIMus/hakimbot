@@ -7,4 +7,5 @@ class Unit(
     val meleeProtection: UnitAttackProtection,
     val rangeProtection: UnitAttackProtection,
     val damage: UnitDamageRange,
+    val price: Double,
 )

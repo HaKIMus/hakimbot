@@ -3,7 +3,6 @@ package com.hakim.hakimbot.command
 import com.hakim.hakimbot.twitter.TwitterFacade
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.entities.MessageEmbed
-import net.dv8tion.jda.api.entities.MessageEmbed.Thumbnail
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 import twitter4j.Tweet
@@ -15,10 +14,10 @@ class TwitterCommand(private val twitterFacade: TwitterFacade) : ListenerAdapter
             "twitter" -> {
                 event.deferReply().queue()
 
-                val twitterId = event.getOption("twitter_id")?.asLong ?: return
-                val elonMuskTweets = twitterFacade.readUserTweets(twitterId)
+                val twitterId = event.getOption("twitter_id")?.asInt ?: return
+                val tweets = twitterFacade.readUserTweets(twitterId.toLong())
 
-                event.hook.sendMessageEmbeds(buildEbForTweet(elonMuskTweets.first())).queue()
+                event.hook.sendMessageEmbeds(buildEbForTweet(tweets.first())).queue()
             }
             "maja" -> {
                 event.deferReply().queue()
@@ -39,7 +38,7 @@ class TwitterCommand(private val twitterFacade: TwitterFacade) : ListenerAdapter
 
     private fun buildEbForTweet(tweet: Tweet, thumbnailUrl: String? = null): MessageEmbed {
         return EmbedBuilder().apply {
-            setTitle("Tweet @${ twitterFacade.tweetAuthorName(tweet.authorId!!) } na dziś")
+            setTitle("Tweet ${tweet.authorId?.let { "@" + twitterFacade.tweetAuthorName(it) }} na dziś")
             setColor(Color(29, 161, 242))
             setDescription(tweet.text)
             addBlankField(false)

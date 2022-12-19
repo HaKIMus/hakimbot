@@ -18,6 +18,7 @@ import com.hakim.hakimbot.wars.model.service.TranslateModelToDomain
 import com.hakim.hakimbot.wars.service.CreateGeneralFromDiscordUser
 import com.hakim.hakimbot.wars.service.WarRepository
 import com.hakim.hakimbot.wars.ui.command.AttackCmd
+import com.hakim.hakimbot.wars.ui.command.BuyArmyUnitsCmd
 import com.hakim.hakimbot.wars.ui.command.CreateGeneralForEachUser
 import org.jetbrains.exposed.sql.Database
 import org.kodein.di.*
@@ -82,6 +83,7 @@ class Dependencies(private val args: Array<String>) {
             bindSingleton { WarRepository(instance()) }
 
             bindProvider(LISTENER_TAG) { AttackCmd(instance(), instance()) }
+            bindProvider(LISTENER_TAG) { BuyArmyUnitsCmd(instance()) }
             bindProvider(LISTENER_TAG) { CreateGeneralForNewDiscordServerUserService(instance()) }
             bindProvider(LISTENER_TAG) { CreateGeneralForEachUser(instance()) }
         }

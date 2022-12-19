@@ -1,6 +1,5 @@
 package com.hakim.hakimbot.wars.domain
 
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 class War private constructor(
@@ -10,7 +9,6 @@ class War private constructor(
 ) {
     fun start(): WarResult {
         val attackResult = attacker.army.attack(defender.army)
-
         var warResultType = WarResultType.DRAW
 
         if (attackResult.first > 0) {
