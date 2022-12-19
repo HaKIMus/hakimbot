@@ -6,6 +6,8 @@ import com.hakim.hakimbot.infrastructure.ExposedUtilities
 import com.hakim.hakimbot.infrastructure.LISTENER_TAG
 import com.hakim.hakimbot.job.DailyCoins
 import com.hakim.hakimbot.job.GoldQuoteOfTheDay
+import com.hakim.hakimbot.wars.domain.unit.UnitType
+import com.hakim.hakimbot.wars.model.UnitModel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newFixedThreadPoolContext
@@ -21,20 +23,24 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.kodein.di.DI
 import org.kodein.di.allInstances
 import org.kodein.di.instance
 import java.text.DecimalFormat
+import java.util.*
+import kotlin.random.Random
 
 const val RANDOM_CHANNEL_ID = "968482612031135806"
 const val GOLD_QUOTES_CHANNEL_ID = "968619009786392606"
 const val ADMIN_DEVELOPERS_CHANNEL_ID = "1047882371573239901"
 const val HAKIMPL_GUILD_ID = "968482610932236298"
-const val UNDER_DEVELOPMENT = false
+const val UNDER_DEVELOPMENT = true
 
 class Main {
     companion object {
         private lateinit var container: DI
+
         @OptIn(DelicateCoroutinesApi::class)
         private val jobsThread = newFixedThreadPoolContext(2, "jobs")
 
@@ -77,7 +83,7 @@ class Main {
                 Commands.slash("zjedz-pierożka", "Masno"),
                 Commands
                     .slash("twitter", "Ćwierk")
-                    .addOption(OptionType.NUMBER, "twitterId", "User twitter id", true)
+                    .addOption(OptionType.INTEGER, "twitter_id", "User twitter id", true)
                     .setDefaultPermissions(DefaultMemberPermissions.DISABLED),
                 Commands
                     .slash("maja", "Ćwierka maja")
@@ -114,9 +120,34 @@ class Main {
                     .addOption(OptionType.NUMBER, "amount", "Ile żetonów", true),
                 Commands.slash("czy", "Sprawdź czy to prawda")
                     .addOption(OptionType.STRING, "statement", "Co chcesz sprawdzić", true),
+                Commands.slash("admin-upsert-profiles", "Create profile for each user")
+                    .setDefaultPermissions(DefaultMemberPermissions.DISABLED),
                 Commands.slash("love-or-not", "Sprawdź czy kocha | koszt: $LOVE_OR_NOT_COMMAND_PRICE")
                     .addOption(OptionType.USER, "user", "Użytkownik do sprawdzenia", true),
-                ).queue()
+                Commands
+                    .slash("atak", "Zaatakuj innego gracza")
+                    .addOption(OptionType.USER, "user", "Kogo chcesz zaatakować", true),
+                Commands
+                    .slash("awar-upsert-generals", "Creates generals for users")
+                    .setDefaultPermissions(DefaultMemberPermissions.DISABLED),
+                Commands.slash("kup-armie", "Kup jednostki do swojej armii")
+                    .addOption(OptionType.STRING, "unit", "Typ jednostki")
+                    .addOption(OptionType.INTEGER, "amount", "Ilość")
+            ).queue()
+        }
+
+        private fun testWar() {
+            transaction {
+                UnitModel.new(UUID.randomUUID()) {
+                    type = UnitType.MELEE.name
+                    name = "Wojownik"
+                    healthPoints = 12
+                    meleeProtection = 30
+                    rangeProtection = 15
+                    damageMin = 5.0
+                    damageMax = 10.0
+                }
+            }
         }
     }
 }
@@ -138,4 +169,8 @@ fun <T : Channel?> changeChannelOnDevelopment(jda: JDA, channel: T): Channel? {
 fun formatDouble(double: Double): String {
     val decimalFormat = DecimalFormat("#.##")
     return decimalFormat.format(double)
+}
+
+fun randomize(chance: Double): Boolean {
+    return Random.nextDouble(0.01, 100.0) < chance
 }
