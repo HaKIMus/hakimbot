@@ -7,5 +7,5 @@ data class GambleResult(
     val investment: Double,
     val outcome: Double,
     val streak: Short,
-    val event: Event?
+    val event: Event<*, *>?
 )

@@ -2,7 +2,6 @@ package com.hakim.hakimbot.infrastructure
 
 import com.hakim.hakimbot.DiscordData
 import com.hakim.hakimbot.command.*
-import com.hakim.hakimbot.gamble.RandomEvents
 import com.hakim.hakimbot.gamble.UpsertGambleService
 import com.hakim.hakimbot.gamble.command.GambleCommand
 import com.hakim.hakimbot.gamble.event.*
@@ -22,9 +21,9 @@ import com.hakim.hakimbot.wars.ui.command.BuyArmyUnitsCmd
 import com.hakim.hakimbot.wars.ui.command.CreateGeneralForEachUser
 import org.jetbrains.exposed.sql.Database
 import org.kodein.di.*
+import kotlin.random.Random
 
 const val LISTENER_TAG = "@listenerTag"
-const val GAMBLE_RANDOM_EVENT_TAG = "@gambleRandomEvent"
 
 class Dependencies(private val args: Array<String>) {
     val dependencies = DI {
@@ -67,14 +66,7 @@ class Dependencies(private val args: Array<String>) {
 
         val gambleGame = DI.Module("gamble") {
             bindSingleton { UpsertGambleService() }
-
-            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { ZusCharge() }
-            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { TaxReturn() }
-            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { SomeoneRobbedYou() }
-            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { SomeoneHackedYou() }
-            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { LotteryWin() }
-
-            bindProvider { RandomEvents(allInstances(GAMBLE_RANDOM_EVENT_TAG)) }
+            bindProvider { Events(buildEvents()) }
         }
 
         val warGame = DI.Module("war") {
@@ -106,5 +98,91 @@ class Dependencies(private val args: Array<String>) {
         return args.firstOrNull {
             it.startsWith("-$name=", ignoreCase = true)
         }?.substringAfter("=")
+    }
+
+    private fun buildEvents(): List<Event<*, *>> {
+        return listOf<Event<*, *>>(
+            Event(
+                CoinsEventData(
+                    "Wygrałeś w lottto",
+                    EventType.VERY_POSITIVE
+                ) {
+                    rewardWithRange(Random.nextDouble(0.50, 0.80), it, Random.nextInt(4, 10))
+                },
+                CoinsEventProcessor()
+            ),
+
+            Event(
+                CoinsEventData(
+                    "Spotkałeś/aś jednorożca",
+                    EventType.POSITIVE
+                ) {
+                    rewardWithRange(Random.nextDouble(0.20, 0.50), it)
+                },
+                CoinsEventProcessor()
+            ),
+
+            Event(
+                CoinsEventData(
+                    "Zwrot nadpłaty",
+                    EventType.NORMALLY_POSITIVE
+                ) {
+                    rewardWithRange(Random.nextDouble(0.10, 0.20), it, Random.nextInt(1, 5))
+                },
+                CoinsEventProcessor()
+            ),
+
+            Event(
+                CoinsEventData(
+                    "Ktoś Cię zhakował",
+                    EventType.VERY_NEGATIVE
+                ) {
+                    chargeWithRange(Random.nextDouble(0.50, 0.80), it)
+                },
+                CoinsEventProcessor()
+            ),
+
+            Event(
+                CoinsEventData(
+                    "Ktoś Cię obrabował",
+                    EventType.NEGATIVE
+                ) {
+                    chargeWithRange(Random.nextDouble(0.20, 0.50), it)
+                },
+                CoinsEventProcessor()
+            ),
+
+            Event(
+                CoinsEventData(
+                    "Mandacik za niedośnieżony komputer",
+                    EventType.NEGATIVE
+                ) {
+                    chargeWithRange(Random.nextDouble(0.20, 0.50), it)
+                },
+                CoinsEventProcessor()
+            ),
+
+            Event(
+                CoinsEventData(
+                    "Opłata ZUS",
+                    EventType.NORMALLY_NEGATIVE
+                ) {
+                    chargeWithRange(Random.nextDouble(0.10, 0.20), it)
+                },
+                CoinsEventProcessor()
+            )
+        )
+    }
+
+    private fun rewardWithRange(range: Double, balance: Double, balanceBooster: Int? = null): Pair<Double, Double> {
+        val change = range.times(balance * (balanceBooster ?: 1))
+
+        return Pair(balance + change, change)
+    }
+
+    private fun chargeWithRange(chargePercent: Double, balance: Double): Pair<Double, Double> {
+        val change = chargePercent.times(balance)
+
+        return Pair(balance - change, change)
     }
 }
