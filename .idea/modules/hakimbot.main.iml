@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="hakimbot:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="com.hakim" external.system.module.type="sourceSet" external.system.module.version="1.0-SNAPSHOT" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="kotlin-language" name="Kotlin">
+      <configuration version="5" platform="JVM 17" allPlatforms="JVM [17]" useProjectSettings="false">
+        <compilerSettings>
+          <option name="additionalArguments" value="-Xallow-no-source-files" />
+        </compilerSettings>
+        <compilerArguments>
+          <flagArguments>
+            <flagArg name="noReflect" arg="true" />
+            <flagArg name="noStdlib" arg="true" />
+          </flagArguments>
+          <stringArguments>
+            <stringArg name="classpath">
+              <args>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.exposed/exposed-dao/0.40.1/42e6d5f126589e37692d4a2a6fda69d008a15020/exposed-dao-0.40.1.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.exposed/exposed-jdbc/0.40.1/508324c59f5514a2d12ef06d5d7984ca62b31ca4/exposed-jdbc-0.40.1.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.exposed/exposed-java-time/0.40.1/844bf98c2383a23d17f1521541ceb9e24530921d/exposed-java-time-0.40.1.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.exposed/exposed-core/0.40.1/65509a430d83bb0cdab38ae386d078440b0de44b/exposed-core-0.40.1.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm/1.6.4/2c997cd1c0ef33f3e751d3831929aeff1390cb30/kotlinx-coroutines-core-jvm-1.6.4.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-jdk8/1.6.4/5bc4b0bf6fd90fc190fd2f17e919c74c6274cb71/kotlinx-coroutines-jdk8-1.6.4.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.kodein.di/kodein-di-jvm/7.14.0/fe8baa68bf6037dea69f5b3e0aad37f475de6b0/kodein-di-jvm-7.14.0.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.kodein.type/kaverit-jvm/2.1.0/dacbd500254f60643a5d5b388ea4cb48b1405944/kaverit-jvm-2.1.0.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk8/1.7.21/5407c3593c58860cec5ee3f66c468396b42f4c2b/kotlin-stdlib-jdk8-1.7.21.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/net.dv8tion/JDA/5.0.0-alpha.22/2b095db7273c13b23a4ebfa1116726b715822dde/JDA-5.0.0-alpha.22.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.twitter4j/twitter4j-core/4.0.7/5fdb375ccfb3eda7354efb262cbe9b53abccff2/twitter4j-core-4.0.7.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/io.github.takke/jp.takke.twitter4j-v2/1.4.0/83449565aade5015abb8bdd07d71537a164120cb/jp.takke.twitter4j-v2-1.4.0.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/com.vdurmont/emoji-java/5.1.1/5b5896190e12110584f1e9e09eff376565a92626/emoji-java-5.1.1.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.mariadb.jdbc/mariadb-java-client/2.1.2/2484a99a6a86491531d17d491c931de8942ae0/mariadb-java-client-2.1.2.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jdk7/1.7.21/a0ba09615c2213d580315e234b3febfea25b757e/kotlin-stdlib-jdk7-1.7.21.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/4.9.3/b0b14b3d12980912723fb8b66afb48dcda742fcb/okhttp-4.9.3.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-reflect/1.7.20/12b2501e33bb6373e8e347c86d85481863629381/kotlin-reflect-1.7.20.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/com.squareup.okio/okio/2.8.0/49b64e09d81c0cc84b267edd0c2fd7df5a64c78c/okio-jvm-2.8.0.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.7.21/1a2eaf898a0dda83037034b10a42053cf8a7caf8/kotlin-stdlib-1.7.21.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.36/6c62681a2f655b49963a5983b8b0950a6120ae14/slf4j-api-1.7.36.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/com.neovisionaries/nv-websocket-client/2.14/1b66d37914b232cef45e56ec8c01907620de9e3a/nv-websocket-client-2.14.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/club.minnced/opus-java/1.1.1/6656bf7d92e3bc058beb8f0f8a14fe9bc02da4b8/opus-java-1.1.1.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.apache.commons/commons-collections4/4.4/62ebe7544cb7164d87e0637a2a6a2bdc981395e8/commons-collections4-4.4.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.json/json/20170516/949abe1460757b8dc9902c562f83e49675444572/json-20170516.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.21/cb02257de8e13e8498f8e2f69f742f2d438e794d/kotlin-stdlib-common-1.7.21.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/club.minnced/opus-java-api/1.1.1/63c6910fb1f7eebbfd922a01d37a4b94fa0ee5e3/opus-java-api-1.1.1.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/club.minnced/opus-java-natives/1.1.1/183af66d80cd508bbf45343f30ee280e0750f416/opus-java-natives-1.1.1.jar</arg>
+              </args>
+            </stringArg>
+            <stringArg name="destination" arg="$MODULE_DIR$/../../build/classes/kotlin/main" />
+            <stringArg name="jvmTarget" arg="17" />
+            <stringArg name="moduleName" arg="hakimbot" />
+            <stringArg name="apiVersion" arg="1.7" />
+            <stringArg name="languageVersion" arg="1.7" />
+          </stringArguments>
+          <arrayArguments>
+            <arrayArg name="friendPaths" />
+            <arrayArg name="pluginClasspaths">
+              <args>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-jvm/1.7.21/1f327341aebabf8de86dbc1ead1f5ef63c8774ec/kotlin-scripting-jvm-1.7.21.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-scripting-common/1.7.21/f237334a26a2215304a7c78e1bbd9510a88b3459/kotlin-scripting-common-1.7.21.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.7.21/1a2eaf898a0dda83037034b10a42053cf8a7caf8/kotlin-stdlib-1.7.21.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-common/1.7.21/cb02257de8e13e8498f8e2f69f742f2d438e794d/kotlin-stdlib-common-1.7.21.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar</arg>
+                <arg>C:/Gradle/gradle-7.4.2/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-script-runtime/1.7.21/b06d5c58297dccce2a0f69b0636804b0a73b3b9/kotlin-script-runtime-1.7.21.jar</arg>
+              </args>
+            </arrayArg>
+            <arrayArg name="pluginOptions" />
+          </arrayArguments>
+        </compilerArguments>
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/../../out/production/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../src/main/kotlin" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.exposed:exposed-dao:0.40.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.exposed:exposed-jdbc:0.40.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.exposed:exposed-java-time:0.40.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.exposed:exposed-core:0.40.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.6.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.21" level="project" />
+    <orderEntry type="library" name="Gradle: net.dv8tion:JDA:5.0.0-alpha.22" level="project" />
+    <orderEntry type="library" name="Gradle: org.twitter4j:twitter4j-core:4.0.7" level="project" />
+    <orderEntry type="library" name="Gradle: io.github.takke:jp.takke.twitter4j-v2:1.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.vdurmont:emoji-java:5.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.mariadb.jdbc:mariadb-java-client:2.1.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-reflect:1.7.20" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.7.21" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.36" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.kodein.di:kodein-di-jvm:7.14.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.21" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:4.9.3" level="project" />
+    <orderEntry type="library" name="Gradle: com.neovisionaries:nv-websocket-client:2.14" level="project" />
+    <orderEntry type="library" name="Gradle: club.minnced:opus-java:1.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-collections4:4.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.json:json:20170516" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.7.21" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:2.8.0" level="project" />
+    <orderEntry type="library" name="Gradle: club.minnced:opus-java-api:1.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: club.minnced:opus-java-natives:1.1.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.kodein.type:kaverit-jvm:2.1.0" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: net.sf.trove4j:trove4j:3.0.3" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.13.2.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-core:2.13.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: com.fasterxml.jackson.core:jackson-annotations:2.13.2" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Gradle: net.java.dev.jna:jna:4.4.0" level="project" />
+  </component>
+</module>
