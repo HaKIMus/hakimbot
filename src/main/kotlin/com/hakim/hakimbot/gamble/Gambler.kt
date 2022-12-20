@@ -2,6 +2,7 @@ package com.hakim.hakimbot.gamble
 
 import com.hakim.hakimbot.common.exposed.BaseUuidEntity
 import com.hakim.hakimbot.common.exposed.BaseUuidEntityClass
+import com.hakim.hakimbot.gamble.event.v2.Events
 import com.hakim.hakimbot.gamble.exception.*
 import com.hakim.hakimbot.gamble.table.GamblerTable
 import com.hakim.hakimbot.network.model.Profile
@@ -24,7 +25,7 @@ class Gambler(id: EntityID<UUID>) : BaseUuidEntity(id, GamblerTable) {
     var lossStreakMax by GamblerTable.lossStreakMax
     var winStreakMax by GamblerTable.winStreakMax
 
-    fun gamble(balancePercentage: Int, randomEvents: RandomEvents): GambleResult {
+    fun gamble(balancePercentage: Int, events: Events): GambleResult {
         if (balancePercentage !in 10..100) {
             throw InvalidPercentageRangeException(null)
         }
@@ -34,10 +35,10 @@ class Gambler(id: EntityID<UUID>) : BaseUuidEntity(id, GamblerTable) {
         }
 
         val p = balancePercentage / 100.0
-        return gamble(p.times(balance), randomEvents, true)
+        return gamble(p.times(balance), events, true)
     }
 
-    fun gamble(amount: Double, randomEvents: RandomEvents, wasValidated: Boolean = false): GambleResult {
+    fun gamble(amount: Double, events: Events, wasValidated: Boolean = false): GambleResult {
         if (!wasValidated) {
             if (amount < 0.10.times(balance)) {
                 throw Minimum10PercentOfBalance(null)
@@ -55,8 +56,8 @@ class Gambler(id: EntityID<UUID>) : BaseUuidEntity(id, GamblerTable) {
         return transaction {
             val hasWon = Random.nextBoolean()
 
-            val event = randomEvents.randomEvent()
-            event?.onApply(this@Gambler)
+            val event = events.randomEvent()
+            event?.process(this@Gambler)
 
             if (hasWon) {
                 resetLossStreak()

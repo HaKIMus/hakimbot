@@ -3,9 +3,9 @@ package com.hakim.hakimbot.gamble.command
 import com.hakim.hakimbot.formatDouble
 import com.hakim.hakimbot.gamble.GambleResult
 import com.hakim.hakimbot.gamble.Gambler
-import com.hakim.hakimbot.gamble.RandomEvents
 import com.hakim.hakimbot.gamble.UpsertGambleService
-import com.hakim.hakimbot.gamble.event.Event
+import com.hakim.hakimbot.gamble.event.v2.Event
+import com.hakim.hakimbot.gamble.event.v2.Events
 import com.hakim.hakimbot.gamble.exception.*
 import com.hakim.hakimbot.gamble.table.GamblerTable
 import com.hakim.hakimbot.network.model.Profile
@@ -16,7 +16,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter
 import org.jetbrains.exposed.sql.transactions.transaction
 import kotlin.math.min
 
-class GambleCommand(private val upsertGambleService: UpsertGambleService, private val randomEvents: RandomEvents) : ListenerAdapter() {
+class GambleCommand(private val upsertGambleService: UpsertGambleService, private val events: Events) : ListenerAdapter() {
     override fun onSlashCommandInteraction(event: SlashCommandInteractionEvent) {
         val gambler = upsertGambleService.upsert(event.user)
 
@@ -32,7 +32,7 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService, privat
                 }
 
                 try {
-                    val result = gambler.gamble(percent, randomEvents)
+                    val result = gambler.gamble(percent, events)
 
                     event.hook.sendMessage(reactToResult(result, event, gambler)).queue()
                 } catch (e: NoBalanceException) {
@@ -58,7 +58,7 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService, privat
                 }
 
                 try {
-                    val result = gambler.gamble(amount, randomEvents)
+                    val result = gambler.gamble(amount, events)
 
                     event.hook.sendMessage(reactToResult(result, event, gambler)).queue()
                 } catch (e: NoBalanceException) {
@@ -169,7 +169,7 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService, privat
             } żetonów**! :dollar:
                 Win streak: **x${result.streak}** ${displayStringTimes("<a:MOOOOOOOOOO:1000802783022305290>", result.streak.toInt())}
                 Nowy stan konta: ${formatDouble(gambler.balance)} żetonów <:peepostonks:971024543621722142>
-                ${displayEvent(result.event, gambler)}
+                ${displayEvent(result.event)}
             """.trimIndent()
         } else {
             """
@@ -180,17 +180,23 @@ class GambleCommand(private val upsertGambleService: UpsertGambleService, privat
             } żetonów**! :dollar:
                 Loss streak: **x${result.streak}** ${displayStringTimes("<a:MOOOOOOOOOO:1000802783022305290>", result.streak.toInt())} 
                 Nowy stan konta: ${formatDouble(gambler.balance)} żetonów <:peeponotstonks:971024543135174657>
-                ${displayEvent(result.event, gambler)}
+                ${displayEvent(result.event)}
             """.trimIndent()
         }
     }
 
-    private fun displayEvent(event: Event?, gambler: Gambler): String {
+    private fun displayEvent(event: Event<*, *>?): String {
         if (event == null) {
             return ""
         }
 
-        return "O, masz! Trafiłeś wydarzenie: **${event.name}**. ${event.message(gambler)}"
+        var message = "O, masz! Trafiłeś wydarzenie: **${event.data.eventName}**!"
+
+        event.data.message?.let {
+            message = "$message $it"
+        }
+
+        return message
     }
 
     private fun displayStringTimes(string: String, times: Int): String {

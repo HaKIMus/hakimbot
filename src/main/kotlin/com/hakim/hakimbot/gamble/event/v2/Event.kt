@@ -1,0 +1,10 @@
+package com.hakim.hakimbot.gamble.event.v2
+
+import com.hakim.hakimbot.gamble.Gambler
+
+class Event<T : EventData, P : EventProcessor<T, *>> (
+    val data: T,
+    val processor: P,
+){
+    fun process(gambler: Gambler) { processor.process(data, gambler) }
+}

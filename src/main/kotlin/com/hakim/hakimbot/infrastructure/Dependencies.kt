@@ -6,6 +6,10 @@ import com.hakim.hakimbot.gamble.RandomEvents
 import com.hakim.hakimbot.gamble.UpsertGambleService
 import com.hakim.hakimbot.gamble.command.GambleCommand
 import com.hakim.hakimbot.gamble.event.*
+import com.hakim.hakimbot.gamble.event.v2.CoinsEventData
+import com.hakim.hakimbot.gamble.event.v2.CoinsEventProcessor
+import com.hakim.hakimbot.gamble.event.v2.Event
+import com.hakim.hakimbot.gamble.event.v2.Events
 import com.hakim.hakimbot.listener.CreateProfileForUserListener
 import com.hakim.hakimbot.listener.TagMeListener
 import com.hakim.hakimbot.network.model.UpsertProfileService
@@ -13,6 +17,7 @@ import com.hakim.hakimbot.twitter.TwitterData
 import com.hakim.hakimbot.twitter.TwitterFacade
 import org.jetbrains.exposed.sql.Database
 import org.kodein.di.*
+import kotlin.random.Random
 
 const val LISTENER_TAG = "@listenerTag"
 const val GAMBLE_RANDOM_EVENT_TAG = "@gambleRandomEvent"
@@ -63,6 +68,8 @@ class Dependencies(private val args: Array<String>) {
             bindProvider(GAMBLE_RANDOM_EVENT_TAG) { SomeoneHackedYou() }
             bindProvider(GAMBLE_RANDOM_EVENT_TAG) { LotteryWin() }
 
+            bindProvider { Events(buildEvents()) }
+
             bindProvider { RandomEvents(allInstances(GAMBLE_RANDOM_EVENT_TAG)) }
         }
 
@@ -82,5 +89,71 @@ class Dependencies(private val args: Array<String>) {
         return args.firstOrNull {
             it.startsWith("-$name=", ignoreCase = true)
         }?.substringAfter("=")
+    }
+
+    private fun buildEvents(): List<Event<*, *>> {
+        return listOf<Event<*, *>>(
+            Event(
+                CoinsEventData(
+                    "Wygrałeś w lottto",
+                    EventType.VERY_POSITIVE
+                ) {
+                    rewardWithRange(Random.nextDouble(0.50, 0.80), it, Random.nextInt(4, 10))
+                },
+                CoinsEventProcessor()
+            ),
+
+            Event(
+                CoinsEventData(
+                    "Zwrot nadpłaty",
+                    EventType.POSITIVE
+                ) {
+                    rewardWithRange(Random.nextDouble(0.10, 0.20), it, Random.nextInt(1, 5))
+                },
+                CoinsEventProcessor()
+            ),
+
+            Event(
+                CoinsEventData(
+                    "Ktoś Cię zhakował",
+                    EventType.VERY_NEGATIVE
+                ) {
+                    chargeWithRange(Random.nextDouble(0.20, 0.80), it)
+                },
+                CoinsEventProcessor()
+            ),
+
+            Event(
+                CoinsEventData(
+                    "Ktoś Cię obrabował",
+                    EventType.NEGATIVE
+                ) {
+                    chargeWithRange(Random.nextDouble(0.20, 0.50), it)
+                },
+                CoinsEventProcessor()
+            ),
+
+            Event(
+                CoinsEventData(
+                    "Opłata ZUS",
+                    EventType.NEGATIVE
+                ) {
+                    chargeWithRange(Random.nextDouble(0.10, 0.20), it)
+                },
+                CoinsEventProcessor()
+            )
+        )
+    }
+
+    private fun rewardWithRange(range: Double, balance: Double, balanceBooster: Int? = null): Pair<Double, Double> {
+        val change = range.times(balance * (balanceBooster ?: 1))
+
+        return Pair(balance + change, change)
+    }
+
+    private fun chargeWithRange(chargePercent: Double, balance: Double): Pair<Double, Double> {
+        val change = chargePercent.times(balance)
+
+        return Pair(balance - change, change)
     }
 }
