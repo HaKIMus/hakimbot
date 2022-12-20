@@ -2,14 +2,9 @@ package com.hakim.hakimbot.infrastructure
 
 import com.hakim.hakimbot.DiscordData
 import com.hakim.hakimbot.command.*
-import com.hakim.hakimbot.gamble.RandomEvents
 import com.hakim.hakimbot.gamble.UpsertGambleService
 import com.hakim.hakimbot.gamble.command.GambleCommand
 import com.hakim.hakimbot.gamble.event.*
-import com.hakim.hakimbot.gamble.event.v2.CoinsEventData
-import com.hakim.hakimbot.gamble.event.v2.CoinsEventProcessor
-import com.hakim.hakimbot.gamble.event.v2.Event
-import com.hakim.hakimbot.gamble.event.v2.Events
 import com.hakim.hakimbot.listener.CreateProfileForUserListener
 import com.hakim.hakimbot.listener.TagMeListener
 import com.hakim.hakimbot.network.model.UpsertProfileService
@@ -29,7 +24,6 @@ import org.kodein.di.*
 import kotlin.random.Random
 
 const val LISTENER_TAG = "@listenerTag"
-const val GAMBLE_RANDOM_EVENT_TAG = "@gambleRandomEvent"
 
 class Dependencies(private val args: Array<String>) {
     val dependencies = DI {
@@ -72,16 +66,7 @@ class Dependencies(private val args: Array<String>) {
 
         val gambleGame = DI.Module("gamble") {
             bindSingleton { UpsertGambleService() }
-
-            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { ZusCharge() }
-            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { TaxReturn() }
-            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { SomeoneRobbedYou() }
-            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { SomeoneHackedYou() }
-            bindProvider(GAMBLE_RANDOM_EVENT_TAG) { LotteryWin() }
-
             bindProvider { Events(buildEvents()) }
-
-            bindProvider { RandomEvents(allInstances(GAMBLE_RANDOM_EVENT_TAG)) }
         }
 
         val warGame = DI.Module("war") {

@@ -1,4 +1,4 @@
-package com.hakim.hakimbot.gamble.event.v2
+package com.hakim.hakimbot.gamble.event
 
 import com.hakim.hakimbot.gamble.Gambler
 

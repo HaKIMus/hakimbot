@@ -1,6 +1,4 @@
-package com.hakim.hakimbot.gamble.event.v2
-
-import com.hakim.hakimbot.gamble.event.EventType
+package com.hakim.hakimbot.gamble.event
 
 interface EventData {
     val eventName: String

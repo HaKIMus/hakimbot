@@ -1,6 +1,6 @@
 package com.hakim.hakimbot.gamble
 
-import com.hakim.hakimbot.gamble.event.v2.Event
+import com.hakim.hakimbot.gamble.event.Event
 
 data class GambleResult(
     val hasWon: Boolean,

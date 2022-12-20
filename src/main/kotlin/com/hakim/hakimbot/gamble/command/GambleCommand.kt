@@ -4,8 +4,8 @@ import com.hakim.hakimbot.formatDouble
 import com.hakim.hakimbot.gamble.GambleResult
 import com.hakim.hakimbot.gamble.Gambler
 import com.hakim.hakimbot.gamble.UpsertGambleService
-import com.hakim.hakimbot.gamble.event.v2.Event
-import com.hakim.hakimbot.gamble.event.v2.Events
+import com.hakim.hakimbot.gamble.event.Event
+import com.hakim.hakimbot.gamble.event.Events
 import com.hakim.hakimbot.gamble.exception.*
 import com.hakim.hakimbot.gamble.table.GamblerTable
 import com.hakim.hakimbot.network.model.Profile

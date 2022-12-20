@@ -1,6 +1,5 @@
-package com.hakim.hakimbot.gamble.event.v2
+package com.hakim.hakimbot.gamble.event
 
-import com.hakim.hakimbot.gamble.event.EventType
 import kotlin.math.abs
 import kotlin.random.Random
 

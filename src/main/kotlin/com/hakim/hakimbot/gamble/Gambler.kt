@@ -2,7 +2,7 @@ package com.hakim.hakimbot.gamble
 
 import com.hakim.hakimbot.common.exposed.BaseUuidEntity
 import com.hakim.hakimbot.common.exposed.BaseUuidEntityClass
-import com.hakim.hakimbot.gamble.event.v2.Events
+import com.hakim.hakimbot.gamble.event.Events
 import com.hakim.hakimbot.gamble.exception.*
 import com.hakim.hakimbot.gamble.table.GamblerTable
 import com.hakim.hakimbot.network.model.Profile
