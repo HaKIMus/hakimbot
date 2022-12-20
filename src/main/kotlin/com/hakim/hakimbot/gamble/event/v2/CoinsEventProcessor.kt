@@ -1,5 +1,6 @@
 package com.hakim.hakimbot.gamble.event.v2
 
+import com.hakim.hakimbot.formatDouble
 import com.hakim.hakimbot.gamble.Gambler
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -10,9 +11,9 @@ class CoinsEventProcessor : EventProcessor<CoinsEventData, Double> {
             gambler.balance = result.first
 
             if (data.eventType.value > 0) {
-                data.message = "Zwrócono Ci ${result.second} żetonów!"
+                data.message = "Zwrócono Ci **${formatDouble(result.second)}** żetonów!"
             } else {
-                data.message = "Skradziono Ci ${result.second} żetonów!"
+                data.message = "Skradziono Ci **${formatDouble(result.second)}** żetonów!"
             }
 
             return@transaction gambler.balance

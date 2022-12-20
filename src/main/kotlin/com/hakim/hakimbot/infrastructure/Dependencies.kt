@@ -129,8 +129,18 @@ class Dependencies(private val args: Array<String>) {
 
             Event(
                 CoinsEventData(
-                    "Zwrot nadpłaty",
+                    "Spotkałeś/aś jednorożca",
                     EventType.POSITIVE
+                ) {
+                    rewardWithRange(Random.nextDouble(0.20, 0.50), it)
+                },
+                CoinsEventProcessor()
+            ),
+
+            Event(
+                CoinsEventData(
+                    "Zwrot nadpłaty",
+                    EventType.NORMALLY_POSITIVE
                 ) {
                     rewardWithRange(Random.nextDouble(0.10, 0.20), it, Random.nextInt(1, 5))
                 },
@@ -142,7 +152,7 @@ class Dependencies(private val args: Array<String>) {
                     "Ktoś Cię zhakował",
                     EventType.VERY_NEGATIVE
                 ) {
-                    chargeWithRange(Random.nextDouble(0.20, 0.80), it)
+                    chargeWithRange(Random.nextDouble(0.50, 0.80), it)
                 },
                 CoinsEventProcessor()
             ),
@@ -159,8 +169,18 @@ class Dependencies(private val args: Array<String>) {
 
             Event(
                 CoinsEventData(
-                    "Opłata ZUS",
+                    "Mandacik za niedośnieżony komputer",
                     EventType.NEGATIVE
+                ) {
+                    chargeWithRange(Random.nextDouble(0.20, 0.50), it)
+                },
+                CoinsEventProcessor()
+            ),
+
+            Event(
+                CoinsEventData(
+                    "Opłata ZUS",
+                    EventType.NORMALLY_NEGATIVE
                 ) {
                     chargeWithRange(Random.nextDouble(0.10, 0.20), it)
                 },
