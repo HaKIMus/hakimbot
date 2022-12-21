@@ -20,9 +20,9 @@ class Events(private val events: List<Event<*, *>>) {
             EventType.VERY_POSITIVE -> randomize(3.00)
             EventType.POSITIVE -> randomize(5.00)
             EventType.NORMALLY_POSITIVE -> randomize(10.00)
-            EventType.NORMALLY_NEGATIVE -> randomize(12.0)
-            EventType.NEGATIVE -> randomize(6.00)
-            EventType.VERY_NEGATIVE -> randomize(4.00)
+            EventType.NORMALLY_NEGATIVE -> randomize(15.0)
+            EventType.NEGATIVE -> randomize(9.00)
+            EventType.VERY_NEGATIVE -> randomize(6.00)
         }
     }
 

@@ -14,6 +14,8 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
+    maven("https://raw.github.com/AcaiSoftware/chatgpt-java/repository")
 }
 
 dependencies {
@@ -31,6 +33,8 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
+    implementation("io.reactivex.rxjava2:rxjava:2.2.8")
+    implementation("com.github.kittinunf.fuel:fuel:2.3.1")
 }
 
 tasks.test {

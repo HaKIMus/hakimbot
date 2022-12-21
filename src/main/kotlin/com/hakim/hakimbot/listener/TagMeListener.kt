@@ -15,7 +15,8 @@ class TagMeListener : ListenerAdapter() {
         "709112024705138719", //JanekId
         "565972477717512193", // BartekId
         "726251617099448393", // PepegaId
-        "398811037534781440" // MaciegId
+        "398811037534781440", // MaciegId
+        "233633536509345793", // HaKIM
     )
     override fun onMessageReceived(event: MessageReceivedEvent) {
         val mentions = event.message.mentions.getMentions(Message.MentionType.USER)
