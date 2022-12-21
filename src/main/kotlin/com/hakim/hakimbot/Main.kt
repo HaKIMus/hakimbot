@@ -132,7 +132,9 @@ class Main {
                     .setDefaultPermissions(DefaultMemberPermissions.DISABLED),
                 Commands.slash("kup-armie", "Kup jednostki do swojej armii")
                     .addOption(OptionType.STRING, "unit", "Typ jednostki")
-                    .addOption(OptionType.INTEGER, "amount", "Ilość")
+                    .addOption(OptionType.INTEGER, "amount", "Ilość"),
+                Commands.slash("gigabrain", "Zadaj pytanie gigabrainowi")
+                    .addOption(OptionType.STRING, "question", "Treść pytania")
             ).queue()
         }
 

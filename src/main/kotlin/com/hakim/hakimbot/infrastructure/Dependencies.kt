@@ -5,6 +5,8 @@ import com.hakim.hakimbot.command.*
 import com.hakim.hakimbot.gamble.UpsertGambleService
 import com.hakim.hakimbot.gamble.command.GambleCommand
 import com.hakim.hakimbot.gamble.event.*
+import com.hakim.hakimbot.gigabrain.GPTFacade
+import com.hakim.hakimbot.gigabrain.command.AskGigaBrainCmd
 import com.hakim.hakimbot.listener.CreateProfileForUserListener
 import com.hakim.hakimbot.listener.TagMeListener
 import com.hakim.hakimbot.network.model.UpsertProfileService
@@ -21,7 +23,8 @@ import com.hakim.hakimbot.wars.ui.command.BuyArmyUnitsCmd
 import com.hakim.hakimbot.wars.ui.command.CreateGeneralForEachUser
 import org.jetbrains.exposed.sql.Database
 import org.kodein.di.*
-import kotlin.random.Random
+import kotlin.random.Random.Default.nextDouble
+import kotlin.random.Random.Default.nextInt
 
 const val LISTENER_TAG = "@listenerTag"
 
@@ -80,9 +83,15 @@ class Dependencies(private val args: Array<String>) {
             bindProvider(LISTENER_TAG) { CreateGeneralForEachUser(instance()) }
         }
 
+        val gigaBrain = DI.Module("gigabrain") {
+            bindSingleton { GPTFacade(getArgumentValue("gptToken")) }
+            bindSingleton(LISTENER_TAG) { AskGigaBrainCmd(instance()) }
+        }
+
         bindSingleton { TwitterFacade(instance()) }
         bindSingleton { ProfileRepository() }
 
+        import(gigaBrain)
         import(warGame)
         import(gambleGame)
         import(common)
@@ -107,7 +116,7 @@ class Dependencies(private val args: Array<String>) {
                     "Wygrałeś w lottto",
                     EventType.VERY_POSITIVE
                 ) {
-                    rewardWithRange(Random.nextDouble(0.50, 0.80), it, Random.nextInt(4, 10))
+                    rewardWithRange(nextDouble(0.50, 0.80), it, nextInt(4, 10))
                 },
                 CoinsEventProcessor()
             ),
@@ -117,7 +126,7 @@ class Dependencies(private val args: Array<String>) {
                     "Spotkałeś/aś jednorożca",
                     EventType.POSITIVE
                 ) {
-                    rewardWithRange(Random.nextDouble(0.20, 0.50), it)
+                    rewardWithRange(nextDouble(0.20, 0.50), it)
                 },
                 CoinsEventProcessor()
             ),
@@ -127,7 +136,7 @@ class Dependencies(private val args: Array<String>) {
                     "Zwrot nadpłaty",
                     EventType.NORMALLY_POSITIVE
                 ) {
-                    rewardWithRange(Random.nextDouble(0.10, 0.20), it, Random.nextInt(1, 5))
+                    rewardWithRange(nextDouble(0.10, 0.20), it, nextInt(1, 5))
                 },
                 CoinsEventProcessor()
             ),
@@ -137,7 +146,7 @@ class Dependencies(private val args: Array<String>) {
                     "Ktoś Cię zhakował",
                     EventType.VERY_NEGATIVE
                 ) {
-                    chargeWithRange(Random.nextDouble(0.50, 0.80), it)
+                    chargeWithRange(nextDouble(0.50, 0.80), it)
                 },
                 CoinsEventProcessor()
             ),
@@ -147,7 +156,7 @@ class Dependencies(private val args: Array<String>) {
                     "Ktoś Cię obrabował",
                     EventType.NEGATIVE
                 ) {
-                    chargeWithRange(Random.nextDouble(0.20, 0.50), it)
+                    chargeWithRange(nextDouble(0.20, 0.50), it)
                 },
                 CoinsEventProcessor()
             ),
@@ -157,7 +166,7 @@ class Dependencies(private val args: Array<String>) {
                     "Mandacik za niedośnieżony komputer",
                     EventType.NEGATIVE
                 ) {
-                    chargeWithRange(Random.nextDouble(0.20, 0.50), it)
+                    chargeWithRange(nextDouble(0.20, 0.50), it)
                 },
                 CoinsEventProcessor()
             ),
@@ -167,7 +176,7 @@ class Dependencies(private val args: Array<String>) {
                     "Opłata ZUS",
                     EventType.NORMALLY_NEGATIVE
                 ) {
-                    chargeWithRange(Random.nextDouble(0.10, 0.20), it)
+                    chargeWithRange(nextDouble(0.10, 0.20), it)
                 },
                 CoinsEventProcessor()
             )

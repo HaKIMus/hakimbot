@@ -4,9 +4,9 @@ import com.hakim.hakimbot.formatDouble
 import com.hakim.hakimbot.gamble.Gambler
 import org.jetbrains.exposed.sql.transactions.transaction
 
-class CoinsEventProcessor : EventProcessor<CoinsEventData, Double> {
-    override fun process(data: CoinsEventData, gambler: Gambler): Double {
-        return transaction {
+class CoinsEventProcessor : EventProcessor<CoinsEventData> {
+    override fun process(data: CoinsEventData, gambler: Gambler) {
+        transaction {
             val result = data.coinsTransform(gambler.balance)
             gambler.balance = result.first
 
@@ -16,7 +16,7 @@ class CoinsEventProcessor : EventProcessor<CoinsEventData, Double> {
                 data.message = "Skradziono Ci **${formatDouble(result.second)}** żetonów!"
             }
 
-            return@transaction gambler.balance
+            gambler.balance
         }
     }
 }
